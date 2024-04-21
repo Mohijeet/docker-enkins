@@ -16,12 +16,15 @@ pipeline {
         
         stage('Push Docker images to Docker Hub') {
             steps {
-                script {
-                    // Push Docker images to Docker Hub
-                    docker.withRegistry('https://hub.docker.com/', 'docker') {
-                        docker.image('mohijeet/client-image').push('latest')
-                        docker.image('mohijeet/server-image').push('latest')
-                        docker.image('mohijeet/worker-image').push('latest')
+                withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                    script {
+                        // Login to Docker Hub
+                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                        
+                        // Push Docker images to Docker Hub
+                        docker.image('mohijeet/client-image:latest').push()
+                        docker.image('mohijeet/server-image:latest').push()
+                        docker.image('mohijeet/worker-image:latest').push()
                         // Push other Docker images if needed
                     }
                 }
