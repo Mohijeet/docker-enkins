@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker images to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'mohijeetsinh') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker') {
                         docker.image('mohijeet/client-image').push('latest')
                         docker.image('mohijeet/server-image').push('latest')
                         docker.image('mohijeet/worker-image').push('latest')
